@@ -61,11 +61,11 @@ contract ChatApp{
         _addFriend(msg.sender, friend_key, name);
         _addFriend(friend_key, msg.sender, usersList[msg.sender].name);
     }
-
+    
     //checkAlreadyFriend
-    function checkAlreadyFriend(address pubkey1,address pubkey2)internal view return(bool){
+    function checkAlreadyFriend(address pubkey1,address pubkey2)internal view returns (bool){
 
-        if(userList[pubkey1].friendList.length> userList[pubkey2].friendList.length){
+        if(usersList[pubkey1].friendList.length> usersList[pubkey2].friendList.length){
             address temp = pubkey1;
             pubkey1 = pubkey2;
             pubkey2 = temp;
@@ -104,7 +104,7 @@ contract ChatApp{
         require(checkAlreadyFriend(msg.sender, friend_key), "You are not friends with the given user");
 
         bytes32 chatCode = _getChatCode(msg.sender, friend_key);
-        message memory newMessage = message(msg.sender, block.timestamp, _msg);
+        message memory newMessage = message(msg.sender, _msg , block.timestamp);
         allMessages[chatCode].push(newMessage);
     }
 
