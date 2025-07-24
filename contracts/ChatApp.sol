@@ -82,7 +82,7 @@ contract ChatApp{
         usersList[me].friendList.push(newFriend);
     }
 
-    //GETMY FRIEND
+    //GET MY FRIEND
     function getMyFriendList() external view returns(friend[] memory){
         return usersList[msg.sender].friendList;
     }
