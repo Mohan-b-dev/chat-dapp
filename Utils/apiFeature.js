@@ -39,6 +39,7 @@ export const connectWallet = async () => {
     } else {
       console.error("Wallet connection error:", error);
     }
+    return null;
   }
 };
 
@@ -48,22 +49,17 @@ const fetchContract = (signerOrProvider) =>
 
 // ✅ Connect to the smart contract
 export const connectingWithContract = async () => {
-  try {
-    const web3modal = new Web3Modal({
-      network: "localhost",
-      cacheProvider: true,
-    });
-
-    const connection = await web3modal.connect();
-    const provider = new ethers.providers.Web3Provider(connection);
-    const signer = provider.getSigner();
-    const contract = fetchContract(signer);
-
-    return contract;
-  } catch (error) {
-    console.error("Failed to connect to MetaMask / contract:", error);
+  if (!window.ethereum) {
+    throw new Error("MetaMask not found");
   }
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const contract = new ethers.Contract(ChatAppAddress, ChatAppABI, signer);
+
+  return contract;
 };
+
 
 // ✅ Convert timestamp to readable format
 export const converTime = (time) => {
