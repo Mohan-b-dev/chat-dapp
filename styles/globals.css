@@ -9,3 +9,14 @@ body {
 ::-webkit-scrollbar{
   display: none;
 }
+/* CSS Custom Properties for Maintainability */
+:root {
+  --primary-color: #F18303;
+  --background-dark: #292F3F;
+  --text-light: #E0E0E0;
+  --text-white: #FFFFFF;
+  --button-bg: rgba(0, 0, 0, 0.25);
+  --transition-duration: 0.3s;
+  --border-radius: 0.5rem;
+  --z-index-mobile-menu: 1001;
+}
