@@ -8,7 +8,7 @@ import {
   connectingWithContract,
 } from "../Utils/apiFeature";
 
-export const ChatAppContext = createContext();
+export const ChatAppContext = React.createContext();
 
 export const ChatAppProvider = ({ children }) => {
   //USESTATE
@@ -132,6 +132,8 @@ export const ChatAppProvider = ({ children }) => {
         addFriends,
         sendMessage,
         readUser,
+        connectWallet,
+        checkIfWalletIsConnected,
         account,
         userName,
         friendLists,
