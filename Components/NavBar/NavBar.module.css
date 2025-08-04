@@ -331,3 +331,19 @@
     transform: scale(1.1);
   }
 }
+
+
+
+
+
+
+.modalBox{
+  position:fixed;
+  inset: 0 0 0 0;
+  background-color:#292F3F;
+  z-index:77777777;
+}
+.modalBox{
+  position:absolute;
+  inset:0 0 -70% 0;
+}

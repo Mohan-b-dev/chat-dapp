@@ -1,14 +1,16 @@
 import React, { useContext, useState } from "react";
 import Style from "./NavBar.module.css";
 import { ChatAppContext } from "../../Context/ChatAppContext";
-import { Model } from "../index";
+import { Model } from "../index"; // Ensure Model is correctly imported
+// Import the Error component if it exists, e.g.:
+// import { Error } from "../index";
 import images from "../../assets";
 import Link from "next/link";
 import Image from "next/image";
 
 const NavBar = () => {
   const menuItems = [
-    { menu: "All users", link: "alluser" },
+    { menu: "All users", link: "/alluser" },
     { menu: "CHAT", link: "/" },
     { menu: "CONTACT", link: "/" },
     { menu: "SETTING", link: "/" },
@@ -20,7 +22,25 @@ const NavBar = () => {
   const [open, setOpen] = useState(false);
   const [openModel, setOpenModel] = useState(false);
 
-  const { account, userName, connectWallet } = useContext(ChatAppContext);
+  const { account, userName, connectWallet, createAccount, error } = useContext(ChatAppContext);
+
+  const handleConnectWallet = async () => {
+    try {
+      await connectWallet();
+    } catch (err) {
+      console.error("Wallet connection failed:", err);
+      alert(
+        "Failed to connect wallet. Please ensure MetaMask is installed and try again."
+      );
+    }
+  };
+
+  // Fallback Error component if not imported
+  const Error = ({ error }) => (
+    <div className={Style.error}>
+      <p>Error: {error}</p>
+    </div>
+  );
 
   return (
     <nav className={Style.NavBar} aria-label="Main navigation">
@@ -76,11 +96,7 @@ const NavBar = () => {
             </p>
           </div>
           <div className={Style.NavBar_Box_right_connect}>
-            {account === "" ? (
-              <button onClick={() => connectWallet()}>
-                <span>Connect Wallet</span>
-              </button>
-            ) : (
+            {account ? (
               <button onClick={() => setOpenModel(true)}>
                 <Image
                   src={userName ? images.accountName : images.create2}
@@ -89,6 +105,10 @@ const NavBar = () => {
                   height={20}
                 />
                 <small>{userName || "Create Account"}</small>
+              </button>
+            ) : (
+              <button onClick={handleConnectWallet}>
+                <span>Connect Wallet</span>
               </button>
             )}
           </div>
@@ -103,7 +123,25 @@ const NavBar = () => {
           </div>
         </div>
       </div>
-      {openModel && <Model setOpenModel={setOpenModel} />}
+
+      {/* MODAL COMPONENT */}
+      {!openModel && (
+        <div className={Style.modelBox}>
+          <Model
+            openBox={setOpenModel}
+            title="WELCOME TO"
+            head="CHAT BUDDY"
+            info="AI Overview: A chat application built on a Decentralized Application (DApp) architecture leverages blockchain technology to provide a secure, private, and censorship-resistant messaging platform. Unlike traditional centralized chat applications, DApp-based chat solutions do not rely on a single server or entity to store and manage user data and communications."
+            smallInfo="KINDLY SELECT YOUR NAME..."
+            image={images.hero}
+            functionName={createAccount}
+            address={account}
+          />
+        </div>
+      )}
+
+      {/* ERROR HANDLING */}
+      {error && error !== "" && <Error error={error} />}
     </nav>
   );
 };
